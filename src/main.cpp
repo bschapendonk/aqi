@@ -194,12 +194,11 @@ void do_send(osjob_t *j)
       lpp.addRelativeHumidity(3, iaqSensor.rawHumidity);
       lpp.addAnalogInput(4, iaqSensor.gasResistance);
       lpp.addAnalogInput(5, iaqSensor.iaqEstimate);
-      lpp.addAnalogInput(6, iaqSensor.co2Equivalent);
-      lpp.addAnalogInput(7, iaqSensor.breathVocEquivalent);
-      lpp.addTemperature(8, iaqSensor.temperature);
-      lpp.addRelativeHumidity(9, iaqSensor.humidity);
-      lpp.addDigitalInput(10, iaqSensor.stabStatus);
-      lpp.addDigitalInput(11, iaqSensor.runInStatus);
+      lpp.addTemperature(6, iaqSensor.temperature);
+      lpp.addRelativeHumidity(7, iaqSensor.humidity);
+      lpp.addAnalogInput(8, iaqSensor.staticIaq);
+      lpp.addAnalogInput(9, iaqSensor.co2Equivalent);
+      lpp.addAnalogInput(10, iaqSensor.breathVocEquivalent);
 
       LMIC_setTxData2(1, lpp.getBuffer(), lpp.getSize(), 0);
       Serial.println(F("Packet queued"));
@@ -210,13 +209,11 @@ void do_send(osjob_t *j)
       Serial.println("gasResistance: " + String(iaqSensor.gasResistance) + " Ohm");
       Serial.println("iaqEstimate: " + String(iaqSensor.iaqEstimate) + " 0-500");
       Serial.println("iaqAccuracy: " + String(iaqSensor.iaqAccuracy));
+      Serial.println("temperature: " + String(iaqSensor.temperature) + " deg C");
+      Serial.println("humidity: " + String(iaqSensor.humidity) + "%");
       Serial.println("staticIaq: " + String(iaqSensor.staticIaq));
       Serial.println("co2Equivalent: " + String(iaqSensor.co2Equivalent) + " ppm");
       Serial.println("breathVocEquivalent: " + String(iaqSensor.breathVocEquivalent) + " ppm");
-      Serial.println("temperature: " + String(iaqSensor.temperature) + " deg C");
-      Serial.println("humidity: " + String(iaqSensor.humidity) + "%");
-      Serial.println("stabStatus: " + String(iaqSensor.stabStatus) + " y/n");
-      Serial.println("runInStatus: " + String(iaqSensor.runInStatus) + " y/n");
 
       updateState();
     }
@@ -244,7 +241,7 @@ void setup(void)
 
   loadState();
 
-  bsec_virtual_sensor_t sensorList[12] = {
+  bsec_virtual_sensor_t sensorList[10] = {
       BSEC_OUTPUT_RAW_TEMPERATURE,
       BSEC_OUTPUT_RAW_PRESSURE,
       BSEC_OUTPUT_RAW_HUMIDITY,
@@ -254,11 +251,9 @@ void setup(void)
       BSEC_OUTPUT_CO2_EQUIVALENT,
       BSEC_OUTPUT_BREATH_VOC_EQUIVALENT,
       BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_TEMPERATURE,
-      BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_HUMIDITY,
-      BSEC_OUTPUT_STABILIZATION_STATUS,
-      BSEC_OUTPUT_RUN_IN_STATUS};
+      BSEC_OUTPUT_SENSOR_HEAT_COMPENSATED_HUMIDITY};
 
-  iaqSensor.updateSubscription(sensorList, 12, BSEC_SAMPLE_RATE_LP);
+  iaqSensor.updateSubscription(sensorList, 10, BSEC_SAMPLE_RATE_LP);
   checkIaqSensorStatus();
 
   // LMIC init
