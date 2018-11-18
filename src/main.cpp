@@ -189,16 +189,17 @@ void do_send(osjob_t *j)
     {
       // Prepare upstream data transmission at the next possible time.
       lpp.reset();
-      lpp.addBarometricPressure(1, iaqSensor.pressure / 100);
-      lpp.addTemperature(2, iaqSensor.rawTemperature);
+      lpp.addTemperature(1, iaqSensor.rawTemperature);
+      lpp.addBarometricPressure(2, iaqSensor.pressure / 100);
       lpp.addRelativeHumidity(3, iaqSensor.rawHumidity);
       lpp.addAnalogInput(4, iaqSensor.gasResistance);
       lpp.addAnalogInput(5, iaqSensor.iaqEstimate);
-      lpp.addTemperature(6, iaqSensor.temperature);
-      lpp.addRelativeHumidity(7, iaqSensor.humidity);
-      lpp.addAnalogInput(8, iaqSensor.staticIaq);
-      lpp.addAnalogInput(9, iaqSensor.co2Equivalent);
-      lpp.addAnalogInput(10, iaqSensor.breathVocEquivalent);
+      lpp.addDigitalInput(6, iaqSensor.iaqAccuracy);
+      lpp.addTemperature(7, iaqSensor.temperature);
+      lpp.addRelativeHumidity(8, iaqSensor.humidity);
+      lpp.addAnalogInput(9, iaqSensor.staticIaq);
+      lpp.addAnalogInput(10, iaqSensor.co2Equivalent);
+      lpp.addAnalogInput(11, iaqSensor.breathVocEquivalent);
 
       LMIC_setTxData2(1, lpp.getBuffer(), lpp.getSize(), 0);
       Serial.println(F("Packet queued"));
