@@ -183,44 +183,47 @@ void do_send(osjob_t *j)
   {
     Serial.println(F("OP_TXRXPEND, not sending"));
   }
-  else if (iaqSensor.run())
-  {
-    // Prepare upstream data transmission at the next possible time.
-    lpp.reset();
-    lpp.addBarometricPressure(1, iaqSensor.pressure / 100);
-    lpp.addTemperature(2, iaqSensor.rawTemperature);
-    lpp.addRelativeHumidity(3, iaqSensor.rawHumidity);
-    lpp.addAnalogInput(4, iaqSensor.gasResistance);
-    lpp.addAnalogInput(5, iaqSensor.iaqEstimate);
-    lpp.addAnalogInput(6, iaqSensor.co2Equivalent);
-    lpp.addAnalogInput(7, iaqSensor.breathVocEquivalent);
-    lpp.addTemperature(8, iaqSensor.temperature);
-    lpp.addRelativeHumidity(9, iaqSensor.humidity);
-    lpp.addDigitalInput(10, iaqSensor.stabStatus);
-    lpp.addDigitalInput(11, iaqSensor.runInStatus);
-
-    LMIC_setTxData2(1, lpp.getBuffer(), lpp.getSize(), 0);
-    Serial.println(F("Packet queued"));
-
-    Serial.println("pressure: " + String(iaqSensor.pressure) + " Pa");
-    Serial.println("rawTemperature: " + String(iaqSensor.rawTemperature) + " deg C");
-    Serial.println("rawHumidity: " + String(iaqSensor.rawHumidity) + "%");
-    Serial.println("gasResistance: " + String(iaqSensor.gasResistance) + " Ohm");
-    Serial.println("iaqEstimate: " + String(iaqSensor.iaqEstimate) + " 0-500");
-    Serial.println("iaqAccuracy: " + String(iaqSensor.iaqAccuracy));
-    Serial.println("staticIaq: " + String(iaqSensor.staticIaq));
-    Serial.println("co2Equivalent: " + String(iaqSensor.co2Equivalent) + " ppm");
-    Serial.println("breathVocEquivalent: " + String(iaqSensor.breathVocEquivalent) + " ppm");
-    Serial.println("temperature: " + String(iaqSensor.temperature) + " deg C");
-    Serial.println("humidity: " + String(iaqSensor.humidity) + "%");
-    Serial.println("stabStatus: " + String(iaqSensor.stabStatus) + " y/n");
-    Serial.println("runInStatus: " + String(iaqSensor.runInStatus) + " y/n");
-
-    updateState();
-  }
   else
   {
-    checkIaqSensorStatus();
+    if (iaqSensor.run())
+    {
+      // Prepare upstream data transmission at the next possible time.
+      lpp.reset();
+      lpp.addBarometricPressure(1, iaqSensor.pressure / 100);
+      lpp.addTemperature(2, iaqSensor.rawTemperature);
+      lpp.addRelativeHumidity(3, iaqSensor.rawHumidity);
+      lpp.addAnalogInput(4, iaqSensor.gasResistance);
+      lpp.addAnalogInput(5, iaqSensor.iaqEstimate);
+      lpp.addAnalogInput(6, iaqSensor.co2Equivalent);
+      lpp.addAnalogInput(7, iaqSensor.breathVocEquivalent);
+      lpp.addTemperature(8, iaqSensor.temperature);
+      lpp.addRelativeHumidity(9, iaqSensor.humidity);
+      lpp.addDigitalInput(10, iaqSensor.stabStatus);
+      lpp.addDigitalInput(11, iaqSensor.runInStatus);
+
+      LMIC_setTxData2(1, lpp.getBuffer(), lpp.getSize(), 0);
+      Serial.println(F("Packet queued"));
+
+      Serial.println("pressure: " + String(iaqSensor.pressure) + " Pa");
+      Serial.println("rawTemperature: " + String(iaqSensor.rawTemperature) + " deg C");
+      Serial.println("rawHumidity: " + String(iaqSensor.rawHumidity) + "%");
+      Serial.println("gasResistance: " + String(iaqSensor.gasResistance) + " Ohm");
+      Serial.println("iaqEstimate: " + String(iaqSensor.iaqEstimate) + " 0-500");
+      Serial.println("iaqAccuracy: " + String(iaqSensor.iaqAccuracy));
+      Serial.println("staticIaq: " + String(iaqSensor.staticIaq));
+      Serial.println("co2Equivalent: " + String(iaqSensor.co2Equivalent) + " ppm");
+      Serial.println("breathVocEquivalent: " + String(iaqSensor.breathVocEquivalent) + " ppm");
+      Serial.println("temperature: " + String(iaqSensor.temperature) + " deg C");
+      Serial.println("humidity: " + String(iaqSensor.humidity) + "%");
+      Serial.println("stabStatus: " + String(iaqSensor.stabStatus) + " y/n");
+      Serial.println("runInStatus: " + String(iaqSensor.runInStatus) + " y/n");
+
+      updateState();
+    }
+    else
+    {
+      checkIaqSensorStatus();
+    }
   }
   // Next TX is scheduled after TX_COMPLETE event.
 }
