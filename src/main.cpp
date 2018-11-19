@@ -191,11 +191,11 @@ void do_send(osjob_t *j)
     lpp.addBarometricPressure(2, iaqSensor.pressure / 100);
     lpp.addRelativeHumidity(3, iaqSensor.rawHumidity);
     lpp.addLuminosity(4, iaqSensor.gasResistance / 1000);
-    lpp.addAnalogInput(5, iaqSensor.iaqEstimate);
+    lpp.addLuminosity(5, iaqSensor.iaqEstimate);
     lpp.addAnalogInput(6, iaqSensor.iaqAccuracy);
     lpp.addTemperature(7, iaqSensor.temperature);
     lpp.addRelativeHumidity(8, iaqSensor.humidity);
-    lpp.addAnalogInput(9, iaqSensor.staticIaq);
+    lpp.addLuminosity(9, iaqSensor.staticIaq);
     lpp.addLuminosity(10, iaqSensor.co2Equivalent);
     lpp.addAnalogInput(11, iaqSensor.breathVocEquivalent);
 
